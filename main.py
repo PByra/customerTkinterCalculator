@@ -7,7 +7,7 @@ class main_application(tk.Frame):
               tk.Frame.__init__(self, parent, *args, **kwargs)
               self.parent = parent 
               root.title("my application")
-              root.geometry("562x768")
+              root.geometry("562x768") 
 
 
         #started button functionality 

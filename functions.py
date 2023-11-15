@@ -1,10 +1,3 @@
-import tkinter as tk
-from tkinter import ttk
-
-def button_func():
-    print('a button was pressed')
-
-
 #create window 
 window = tk.Tk() 
 window.title("Window and Widgets")
