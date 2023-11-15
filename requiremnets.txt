@@ -1,0 +1,4 @@
+tkinter == 8.6
+python == 3.10.2
+ttkboostrap == 1.10.1
+pillow == 10.1.0
