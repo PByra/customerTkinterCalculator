@@ -1,23 +1,62 @@
-import tkinter as tk
-from tkinter import ttk
+import customtkinter as cttk
+
+class frame_Gen(cttk.CTkFrame):
+    def __init__(self, master, widgets, **kwargs):
+        super().__init__(master, **kwargs)
 
 
-class main_application(tk.Frame):
-        def __init__(self, parent, *args, **kwargs):
-              tk.Frame.__init__(self, parent, *args, **kwargs)
-              self.parent = parent 
-              root.title("my application")
-              root.geometry("562x768") 
+        #this is a poor way of doing this and may lead to issues later as we add widgets
+        #and adjust them as the tuple passed will need to contain many 'None' values, 
+        #I will come back to this later, however at this time I would like to work on the 
+        #functionality of the apps
+        for row, widget_info in enumerate(widgets): 
+            widget_type, widget_text, widget_command = widget_info
+
+            if widget_type == "button":
+                widget = cttk.CTkButton(self, text=widget_text, command = widget_command)
+            elif widget_type == "label":
+                widget = cttk.CTkLabel(self, text=widget_text)
+            else:
+                #place holder for other widgets 
+                continue
+
+            widget.pack(pady = 5, padx = 10)
 
 
-        #started button functionality 
-        def button_func(self):
-            print('a button was pressed')
+
+class App(cttk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.geometry("400x600")
+        cttk.set_appearance_mode("dark")
+        cttk.set_default_color_theme("green")
+        self.grid_rowconfigure(0, weight=1)  
+        self.grid_columnconfigure(0, weight=1)
+
+        main_Widgets = [
+            ("label", "Here are the Applications", None),
+            ("button", "Calculator App", self.button_Calculator),
+            ("button", "Sales Finder App", self.button_SalesFinder),
+            ("button", "Tangerine Finance App", self.button_TangerineFinance)
+        ]
+
+
+        frame1 = frame_Gen(master=self, widgets=main_Widgets)
+        frame1.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+
+
+    def button_Calculator(self):
+        print("Calculator app Opened")
+
+    def button_SalesFinder(self):
+        print("SalesFinder App Opened")
+
+    def button_TangerineFinance(self):
+        print("Tangerine Finance App Opened")
+
+    
 
 
 
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    main_application(root)
-    root.mainloop()
+app = App()
+app.mainloop()
