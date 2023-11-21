@@ -6,43 +6,65 @@ class calculatorApp(cttk.CTk):
         super().__init__()
         self.geometry("600x300")
         self.title("Calculator")
+        cttk.set_appearance_mode("dark")
+        cttk.set_default_color_theme("green")
         
-        self.equation = cttk.StringVar()
-        self.expression = cttk.StringVar()
+        self.equation = ''
+        self.expression = ''
         
         calculator_Widgets = [
-            ("button", "c", None, 0, 0),
-            ("button", "(", None, 0, 1),
-            ("button", ")", None, 0, 2),
-            ("button", "+", None, 0, 3),
-            ("button", "7", None, 1, 0),
-            ("button", "8", None, 1, 1),
-            ("button", "9", None, 1, 2),
-            ("button", "-", None, 1, 3),
-            ("button", "4", None, 2, 0),
-            ("button", "5", None, 2, 1),
-            ("button", "6", None, 2, 2),
-            ("button", "x", None, 2, 3),
-            ("button", "1", None, 3, 0),
-            ("button", "2", None, 3, 1),
-            ("button", "3", None, 3, 2),
-            ("button", "/", None, 3, 3),
-            ("button", "0", lambda: self.press(0), 4, 0),
-            ("button", "pi", None, 4, 1),
-            ("button", "e", None, 4, 2),
-            ("button", "=", None, 4, 3),
+            ("button", 'c', self.clear, 0, 0),
+            ("button", '', None, 0, 1),
+            ("button", '', None, 0, 2),
+            ("button", '+', lambda: self.press('+'), 0, 3),
+            ("button", '7', lambda: self.press(7), 1, 0),
+            ("button", '8', lambda: self.press(8), 1, 1),
+            ("button", '9', lambda: self.press(9), 1, 2),
+            ("button", '-', lambda: self.press('-'), 1, 3),
+            ("button", '4', lambda: self.press(4), 2, 0),
+            ("button", '5', lambda: self.press(5), 2, 1),
+            ("button", '6', lambda: self.press(6), 2, 2),
+            ("button", 'x', lambda: self.press('*'), 2, 3),
+            ("button", '1', lambda: self.press(1), 3, 0),
+            ("button", '2', lambda: self.press(2), 3, 1),
+            ("button", '3', lambda: self.press(3), 3, 2),
+            ("button", '/', lambda: self.press('/'), 3, 3),
+            ("button", '0', lambda: self.press(0), 4, 0),
+            ("button", 'pi', lambda: self.press(3.141), 4, 1),
+            ("button", 'e', lambda: self.press(2.718), 4, 2),
+            ("button", '=', self.equals, 4, 3),
         ]
 
-        text_box = cttk.CTkEntry(self, textvariable = self.expression, height = 100, width = 580, font = ('Arial', 90))
-        text_box.grid(padx = 10, pady = 10)
+        self.text_box = cttk.CTkEntry(self, textvariable = self.expression, height = 100, width = 580, font = ('Arial', 90))
+        self.text_box.grid(padx = 10, pady = 10)
 
         functionality_frame = frame_Gen(master = self, widgets = calculator_Widgets)
         functionality_frame.grid(padx = 0, pady = 15, sticky = "s")
     
-    def press(self, num): 
-        self.expression.set(self.equation.get() + str(num))
+
+    def press(self, num):
+        self.equation += str(num)
+        self.text_box.delete(0, 'end')
+        self.text_box.insert('end', self.equation)
+
+
+    def equals(self):
+        try: 
+            self.total = str(eval(self.equation))
+            self.text_box.delete(0, 'end')
+            self.text_box.insert('end', self.total)
+            self.equation = self.total
+        except:
+            self.text_box.delete(0, 'end')
+            self.text_box.insert('end', 'error')
             
 
+    def clear(self): 
+        self.equation = '' 
+        self.text_box.delete(0, 'end')
+        self.text_box.insert('end', self.equation)
+
+            
 
 class frame_Gen(cttk.CTkFrame):
     def __init__(self, master, widgets, **kwargs):
@@ -66,42 +88,8 @@ class frame_Gen(cttk.CTkFrame):
             widget.grid(row = widget_row, column = widget_column)
 
 
-class App(cttk.CTk):
-    def __init__(self):
-        super().__init__()
-        self.title("Main Appliation")
-        self.geometry("400x600")
-        cttk.set_appearance_mode("dark")
-        cttk.set_default_color_theme("green")
-        self.grid_rowconfigure(0, weight=1)  
-        self.grid_columnconfigure(0, weight=1)
-
-        main_Widgets = [
-            ("label", "Here are the Applications", None, None, None),
-            ("button", "Calculator App", self.button_Calculator, None, None),
-            ("button", "Sales Finder App", self.button_SalesFinder, None, None),
-            ("button", "Tangerine Finance App", self.button_TangerineFinance, None, None)
-        ]
-
-
-        frame1 = frame_Gen(master = self, widgets = main_Widgets)
-        frame1.grid(row = 0, column = 0, padx = 20, pady = 20, sticky = "nsew")
-
-
-    def button_Calculator(self):
-        calculator_instance = calculatorApp()
-        calculator_instance.mainloop()
-        print("Calculator app Opened")
-
-    def button_SalesFinder(self):
-        print("SalesFinder App Opened")
-
-    def button_TangerineFinance(self):
-        print("Tangerine Finance App Opened")
-
-    
 def main(): 
-    app = App()
+    app = calculatorApp()
     app.mainloop()
 
 
